@@ -66,7 +66,6 @@ class RPSSkel extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e){
 			audio = !audio;
 			System.out.println(audio);
-			//here
 			textField.setText("Off");
 			
 			

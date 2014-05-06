@@ -74,7 +74,6 @@ class Gameboard extends JPanel {
 
    // remember last chosen JButton and mark it yellow
     void markPlayed(String r) {
-    System.out.println(map.get(r));
 	lastPlayed = map.get(r); 
 	lastPlayed.setBackground(Color.yellow);
     }

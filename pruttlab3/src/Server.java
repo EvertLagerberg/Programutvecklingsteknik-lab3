@@ -9,7 +9,7 @@ import java.util.*;
 public class Server {
     public static void main( String[] args) {
 	try {
-	    ServerSocket sock = new ServerSocket(4322,100);
+	    ServerSocket sock = new ServerSocket(4323,100);
 	    while (true) 
 		new ClientHandler(sock.accept()).start();
 	}
