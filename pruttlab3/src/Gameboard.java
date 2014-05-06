@@ -78,7 +78,6 @@ class Gameboard extends JPanel {
 	lastPlayed = map.get(r); 
 	System.out.println(map.get(r));
 	lastPlayed.setOpaque(true);
-	
 	lastPlayed.setBackground(Color.yellow);
     }
 
