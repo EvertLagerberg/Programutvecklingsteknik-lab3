@@ -28,14 +28,14 @@ public class Klient {
 	}*/
 	
 	
-	public void Send(String message){
+	public void send(String message){
 		ut.println(message);
 		ut.flush();
 	}
 	
 	
-	public void Read() throws IOException{
-		System.out.println(in.readLine());
+	public String read() throws IOException{
+		return in.readLine();
 	}
 	
 	
