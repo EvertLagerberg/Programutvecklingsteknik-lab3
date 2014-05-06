@@ -107,53 +107,65 @@ class RPSSkel extends JFrame implements ActionListener {
 		if (playerhand.equals(computerhand)) {
 			myboard.setLower("DRAW");
 			computersboard.setLower("DRAW");
-			if (audio)
-				playSound("draw.wav");
-		} else if (playerhand.equals("STEN")) {
-			if (computerhand.equals("PASE")) {
+			if(audio)playSound("draw.wav");
+		}
+		else if (playerhand.equals("STEN")){
+			if (computerhand.equals("PASE")){
 				computersboard.wins();
-				if (audio)
-					playSound("lose.wav");
-				myboard.setLower("LOOSE");
+				myboard.setLower("LOSE");
 				computersboard.setLower("WIN");
-			} else if (computerhand.equals("SAX")) {
-				myboard.wins();
-				if (audio)
-					playSound("win.wav");
+				if(audio)playSound("lose.wav");
 			}
-		} else if (playerhand.equals("PASE")) {
-			if (computerhand.equals("SAX")) {
-				computersboard.wins();
-				if (audio)
-					playSound("lose.wav");
-			} else if (computerhand.equals("STEN")) {
+			else if (computerhand.equals("SAX")){
 				myboard.wins();
-				if (audio)
-					playSound("win.wav");
+				myboard.setLower("WIN");
+				computersboard.setLower("LOSE");
+				if(audio)playSound("win.wav");
 			}
-		} else if (playerhand.equals("SAX")) {
-			if (computerhand.equals("STEN")) {
-				computersboard.wins();
-
-				if (audio)
-					playSound("lose.wav");
-			} else if (computerhand.equals("PASE")) {
-				myboard.wins();
-				playSound("win.wav");
-			}
-
 		}
-
+		else if (playerhand.equals("PASE")){
+			if (computerhand.equals("SAX")){
+				myboard.setLower("LOSE");
+				computersboard.setLower("WIN");
+				computersboard.wins();
+				if(audio)playSound("lose.wav");
+			}
+			else if (computerhand.equals("STEN")){
+				myboard.wins();
+				myboard.setLower("WIN");
+				computersboard.setLower("LOSE");
+				if(audio)playSound("win.wav");
+			}
 	}
-
-	public void playSound(String filename) {
-		try {
+		else if (playerhand.equals("SAX")){
+			if (computerhand.equals("STEN")){
+				myboard.setLower("LOSE");
+				computersboard.setLower("WIN");
+				computersboard.wins();
+				if(audio)playSound("lose.wav");
+			}
+			else if (computerhand.equals("PASE")){
+				myboard.wins();
+				myboard.setLower("WIN");
+				computersboard.setLower("LOSE");
+				if(audio)playSound("win.wav");
+			}
+			
+	}
+	
+}
+	
+	public void playSound(String filename){
+		try
+	    {
 			Clip clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(new File(filename)));
-			clip.start();
-		} catch (Exception exc) {
-			exc.printStackTrace(System.out);
-		}
-
+	        clip.open(AudioSystem.getAudioInputStream(new File(filename)));
+	        clip.start();
+	    }
+	    catch (Exception exc)
+	    {
+	        exc.printStackTrace(System.out);
+	    }
+		
 	}
 }
