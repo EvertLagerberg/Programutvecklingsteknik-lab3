@@ -4,25 +4,39 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
 public class Klient {
 	
-	Klient(){
+	private PrintWriter ut;
+	private BufferedReader in;
+	
+	Klient() {
 		try {
-		       Socket socket=new Socket("gru-ld03.csc.kth.se",4713);
-		       BufferedReader in=new BufferedReader
-		           (new InputStreamReader(socket.getInputStream()));
-		       PrintWriter ut=new PrintWriter(socket.getOutputStream());
-		       ut.println("Tommy"); ut.flush();
-		       System.out.println(in.readLine());
-		   }
-	 catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	}
-		public static void main(String args[]) {
-			new Klient();
-			new Gameboard("Tommy");
+			Socket socket = new Socket("localhost", 4322);
+			in = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+			ut = new PrintWriter(socket.getOutputStream());
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
+
+	/*public static void main(String args[]) {
+		new Klient();
+		new Gameboard("Tommy");
+	}*/
+	
+	
+	public void Send(String message){
+		ut.println(message);
+		ut.flush();
+	}
+	
+	
+	public void Read() throws IOException{
+		System.out.println(in.readLine());
+	}
+	
+	
 }
