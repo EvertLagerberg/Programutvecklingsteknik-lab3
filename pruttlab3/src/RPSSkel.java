@@ -6,6 +6,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 
 import java.net.*;
@@ -71,6 +72,8 @@ class RPSSkel extends JFrame implements ActionListener {
 			myboard.setLower("ETT");
 			computersboard.setLower("ETT");
 			counter++;
+		
+		
 		}
 		else if(counter == 2){
 			myboard.setLower("TVÅ");
@@ -143,7 +146,7 @@ class RPSSkel extends JFrame implements ActionListener {
 		try
 	    {
 			Clip clip = AudioSystem.getClip();
-	        clip.open(AudioSystem.getAudioInputStream(new File(filename)));
+	        clip.open(AudioSystem.getAudioInputStream(new File("test.wav")));
 	        clip.start();
 	    }
 	    catch (Exception exc)
