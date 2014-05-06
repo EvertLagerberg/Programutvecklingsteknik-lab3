@@ -114,6 +114,8 @@ class RPSSkel extends JFrame implements ActionListener {
 				computersboard.wins();
 				if (audio)
 					playSound("lose.wav");
+				myboard.setLower("LOOSE");
+				computersboard.setLower("WIN");
 			} else if (computerhand.equals("SAX")) {
 				myboard.wins();
 				if (audio)
