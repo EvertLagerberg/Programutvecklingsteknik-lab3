@@ -1,13 +1,22 @@
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.swing.*;
 
 import java.net.*;
 import java.io.*;
 import java.util.*;
 class RPSSkel extends JFrame implements ActionListener {
-    Gameboard myboard, computersboard;
+	
+	
+	
+		
+	Gameboard myboard, computersboard;
     int counter = 1; // To count ONE ... TWO  and on THREE you play
     Socket socket;
     BufferedReader in;
@@ -55,6 +64,7 @@ class RPSSkel extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if(counter == 1){
 			myboard.resetColor();
 			computersboard.resetColor();
@@ -86,35 +96,60 @@ class RPSSkel extends JFrame implements ActionListener {
 	}
  
 	public void compare(String playerhand, String computerhand){
+		
+	
+	
+
 		if(playerhand.equals(computerhand)){
 			myboard.setLower("DRAW");
 			computersboard.setLower("DRAW");
+			playSound("draw.wav");
 		}
 		else if (playerhand.equals("STEN")){
 			if (computerhand.equals("PASE")){
 				computersboard.wins();
+				playSound("lose.wav");
 			}
 			else if (computerhand.equals("SAX")){
 				myboard.wins();
+				playSound("win.wav");
 			}
 		}
 		else if (playerhand.equals("PASE")){
 			if (computerhand.equals("SAX")){
 				computersboard.wins();
+				playSound("lose.wav");
 			}
 			else if (computerhand.equals("STEN")){
 				myboard.wins();
+				playSound("win.wav");
 			}
 	}
 		else if (playerhand.equals("SAX")){
 			if (computerhand.equals("STEN")){
 				computersboard.wins();
+				playSound("lose.wav");
 			}
 			else if (computerhand.equals("PASE")){
 				myboard.wins();
+				playSound("win.wav");
 			}
 			
 	}
 	
 }
+	
+	public void playSound(String filename){
+		try
+	    {
+			Clip clip = AudioSystem.getClip();
+	        clip.open(AudioSystem.getAudioInputStream(new File(filename)));
+	        clip.start();
+	    }
+	    catch (Exception exc)
+	    {
+	        exc.printStackTrace(System.out);
+	    }
+		
+	}
 }
