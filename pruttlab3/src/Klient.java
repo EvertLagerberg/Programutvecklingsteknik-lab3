@@ -11,7 +11,7 @@ public class Klient {
 	
 	Klient() {
 		try {
-			Socket socket = new Socket("localhost", 4322);
+			Socket socket = new Socket("localhost", 4323);
 			in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			ut = new PrintWriter(socket.getOutputStream());
@@ -35,7 +35,7 @@ public class Klient {
 	
 	
 	public String read() throws IOException{
-		return in.readLine();
+		return(in.readLine());
 	}
 	
 	

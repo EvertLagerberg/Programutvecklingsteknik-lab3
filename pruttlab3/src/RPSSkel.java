@@ -3,7 +3,9 @@ import java.awt.event.*;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.swing.*;
 
 import java.net.*;
@@ -13,141 +15,141 @@ class RPSSkel extends JFrame implements ActionListener {
 	
 	
 	
-	  AudioFormat audioFormat;
-	  AudioInputStream audioInputStream;
-	  SourceDataLine sourceDataLine;
-	  boolean audio = true;
-
-	  
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    Gameboard myboard, computersboard;
+		
+	Gameboard myboard, computersboard;
     int counter = 1; // To count ONE ... TWO  and on THREE you play
     Socket socket;
     BufferedReader in;
     PrintWriter out;
     JButton closebutton;
+    JButton soundbutton;
+    Klient klient = new Klient();
     
-    public Klient klient = new Klient();
     
-    
-    RPSSkel (String player) throws IOException {
-    	
-  
-  
-    klient.send(player);
-    klient.read();
+    RPSSkel (String name) throws IOException {
+    klient.send("Tommy");
+    klient.read();	
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 	closebutton = new JButton("Close");
-	myboard = new Gameboard(player, this);
+	soundbutton = new JButton("Sound");
+	myboard = new Gameboard(name, this); // Must be changed later!
 	computersboard = new Gameboard("Computer");
-	
-	
 	JPanel boards = new JPanel();
 	boards.setLayout(new GridLayout(1,2));
+	JPanel options = new JPanel();
+	options.setLayout(new GridLayout(2,1));
 	boards.add(myboard);
 	boards.add(computersboard);
-	
-	
-	JPanel audioboard = new JPanel();
-
-	final JTextField textField =
-            new JTextField("Audio on");
-  	final JButton audioBtn = new JButton("Toggle Audio");
-  	
-	audioBtn.addActionListener(new ActionListener(){
-		public void actionPerformed(ActionEvent e){
-			audio = !audio;
-			System.out.println(audio);
-			textField.setText("Off");
-			
-			
-		}
-		
-	});
-  	
-  	
-  	
-  	
-  	audioboard.setLayout(new GridLayout(1,2));
-
-	audioboard.add(audioBtn);
-	audioboard.add(textField);
-  	
-  	
+	options.add(soundbutton);
+	options.add(closebutton);
 	add(boards, BorderLayout.CENTER);
-	closebutton.addActionListener(new ActionListener(){
-		public void actionPerformed(ActionEvent e){
-			System.out.println("tja");
-			
-		}
-		
-	});
-	add(closebutton, BorderLayout.SOUTH);
-	add(audioboard, BorderLayout.NORTH);
+	add(options, BorderLayout.SOUTH);
+	
 	setSize(300, 550);
 	setVisible(true);
-
+    
+    closebutton.addActionListener(new ActionListener(){
+    	public void actionPerformed (ActionEvent e){ 
+    		System.exit(0);
+    	}
+    	});
+    
     }
-
-    public static void main (String[] u) throws IOException {
-	new RPSSkel(u[0]);
-	
-
+    public static void main (String[] args) throws IOException  {
+    String name = args[0];
+	new RPSSkel(name);
 	
 	
     }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if(counter == 1){
+			myboard.resetColor();
+			computersboard.resetColor();
 			myboard.setLower("ETT");
 			computersboard.setLower("ETT");
 			counter++;
 		}
 		else if(counter == 2){
-			myboard.setLower("TVÅ");
-			computersboard.setLower("TVÅ");
+			myboard.setLower("TV�");
+			computersboard.setLower("TV�");
 			counter++;
-			
 		}
-		else if(counter == 3){
-			String computerhand = "";
-
-			myboard.setLower("TRE");
-			myboard.setUpper(e.getActionCommand());
-			myboard.markPlayed(e.getActionCommand());
+		else if(counter == 3)
 			
-			
-			counter = 1;
-			klient.send(e.getActionCommand());
 			try {
-				computerhand = klient.read();
-			} catch (IOException e1) {
+					myboard.markPlayed(e.getActionCommand());
+					klient.send(e.getActionCommand());
+					String computerhand = klient.read();
+					computersboard.markPlayed(computerhand);
+					myboard.setUpper(e.getActionCommand());
+					computersboard.setUpper(computerhand);
+					counter=1;
+					compare(e.getActionCommand(),computerhand);
+				}
+			catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-			computersboard.setLower("TRE");
-			computersboard.setUpper(computerhand);
-			compare(e.getActionCommand(), computerhand);
-		
-		}
 	}
-	
-public void compare(String player, String computer){
-	
-	
-	
-}
+ 
+	public void compare(String playerhand, String computerhand){
+		
 	
 	
 
+		if(playerhand.equals(computerhand)){
+			myboard.setLower("DRAW");
+			computersboard.setLower("DRAW");
+			playSound("draw.wav");
+		}
+		else if (playerhand.equals("STEN")){
+			if (computerhand.equals("PASE")){
+				computersboard.wins();
+				playSound("lose.wav");
+			}
+			else if (computerhand.equals("SAX")){
+				myboard.wins();
+				playSound("win.wav");
+			}
+		}
+		else if (playerhand.equals("PASE")){
+			if (computerhand.equals("SAX")){
+				computersboard.wins();
+				playSound("lose.wav");
+			}
+			else if (computerhand.equals("STEN")){
+				myboard.wins();
+				playSound("win.wav");
+			}
+	}
+		else if (playerhand.equals("SAX")){
+			if (computerhand.equals("STEN")){
+				computersboard.wins();
+				playSound("lose.wav");
+			}
+			else if (computerhand.equals("PASE")){
+				myboard.wins();
+				playSound("win.wav");
+			}
+			
+	}
+	
+}
+	
+	public void playSound(String filename){
+		try
+	    {
+			Clip clip = AudioSystem.getClip();
+	        clip.open(AudioSystem.getAudioInputStream(new File(filename)));
+	        clip.start();
+	    }
+	    catch (Exception exc)
+	    {
+	        exc.printStackTrace(System.out);
+	    }
+		
+	}
 }
